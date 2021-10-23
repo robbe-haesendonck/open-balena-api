@@ -63,8 +63,17 @@ export const generateConfig = async (
 			req.query.provisioningKeyName ??
 			undefined;
 
+		const expiryDate: string | undefined =
+			req.body.provisioningKeyExpiry ??
+			req.query.provisioningKeyExpiry ??
+			undefined;
+
 		if (typeof keyName === 'string') {
 			apiKeyOptions.name = keyName;
+		}
+
+		if (typeof expiryDate === 'string') {
+			apiKeyOptions.expiryDate = new Date(expiryDate);
 		}
 
 		return await createProvisioningApiKey(req, app.id, apiKeyOptions);

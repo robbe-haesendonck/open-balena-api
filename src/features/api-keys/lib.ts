@@ -12,6 +12,7 @@ export interface ApiKeyOptions {
 	name?: string;
 	description?: string;
 	tx?: Tx;
+	expiryDate?: Date;
 }
 
 interface InternalApiKeyOptions extends ApiKeyOptions {
@@ -24,7 +25,7 @@ const $createApiKey = async (
 	roleName: string,
 	req: Request,
 	actorTypeID: number,
-	{ apiKey, tx, name, description }: InternalApiKeyOptions,
+	{ apiKey, tx, name, description, expiryDate }: InternalApiKeyOptions,
 ): Promise<string> => {
 	const actorable = await api.resin.get({
 		resource: actorType,
@@ -68,6 +69,7 @@ const $createApiKey = async (
 				key: apiKey,
 				name,
 				description,
+				expiryDate,
 			},
 			options: { returnResource: false },
 		}) as Promise<{ id: number }>,
