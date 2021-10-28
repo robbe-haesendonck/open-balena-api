@@ -1,4 +1,17 @@
 - commits:
+    - subject: Drop circleCI and run tests on balenaCI
+      hash: afa2f0db7ec30e93065cd35111fefd3143833aed
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+        signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+      author: Thodoris Greasidis
+      nested: []
+  version: 0.161.10
+  date: 2021-10-28T12:44:59.019Z
+- commits:
     - subject: Add HOST_CONFIG_gpio config definition for config.txt backend
       hash: f7b9d3f3f7f38da78763d438f8b07fa64e71c353
       body: ''
