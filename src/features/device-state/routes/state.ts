@@ -202,6 +202,8 @@ function buildAppFromRelease(
 const ConfigurationVarsToLabels = {
 	RESIN_SUPERVISOR_UPDATE_STRATEGY: 'io.resin.update.strategy',
 	RESIN_SUPERVISOR_HANDOVER_TIMEOUT: 'io.resin.update.handover-timeout',
+	BALENA_SUPERVISOR_UPDATE_STRATEGY: 'io.balena.update.strategy',
+	BALENA_SUPERVISOR_HANDOVER_TIMEOUT: 'io.balena.update.handover-timeout',
 };
 
 const releaseExpand = {
