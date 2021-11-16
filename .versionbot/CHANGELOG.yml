@@ -1,4 +1,25 @@
 - commits:
+    - subject: Update config-to-label transform to include `BALENA_*` vars
+      hash: c50ba2e5da6528603b01b1d0627ce82bd51ee8e6
+      body: >
+        [Documentation](https://www.balena.io/docs/learn/deploy/release-strategy/update-strategies/#controlling-the-update-strategy)
+
+        mentions `BALENA_SUPERVISOR_UPDATE_STRATEGY` config var
+
+        as a way to set the update strategy, but this var has no effect as there
+
+        is no transform setup for it (there is only one for for `RESIN_`
+        prefix).
+      footer:
+        Change-type: patch
+        change-type: patch
+        Closes: '#735'
+        closes: '#735'
+      author: Felipe Lalanne
+      nested: []
+  version: 0.172.4
+  date: 2021-11-16T18:33:16.276Z
+- commits:
     - subject: Add the option for a read-only redis endpoint for reading device logs
       hash: bf528bccfd460c815b5768dea36155f2f145993b
       body: ''
