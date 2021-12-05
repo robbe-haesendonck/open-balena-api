@@ -1,4 +1,17 @@
 - commits:
+    - subject: Add an option to input expiry date for provisioning key.
+      hash: 266a4a78741a07a08a1c800cd0055d567de57dfb
+      body: ''
+      footer:
+        Change-Type: minor
+        change-type: minor
+        Signed-off-by: Nitish Agarwal <1592163+nitishagar@users.noreply.github.com>
+        signed-off-by: Nitish Agarwal <1592163+nitishagar@users.noreply.github.com>
+      author: Nitish Agarwal
+      nested: []
+  version: 0.177.0
+  date: 2021-12-05T11:12:01.478Z
+- commits:
     - subject: 'device-state: Drop unused device config filtering implementation'
       hash: b6cf8fb925fa6985de13ee6a2fafcbe98dd6d389
       body: ''
