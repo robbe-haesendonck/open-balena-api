@@ -1,4 +1,17 @@
 - commits:
+    - subject: Combine two of the device managed by supervisor release rules
+      hash: 865dd92b42c423e6d2f34f6d2287353dc05b8515
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+        signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+      author: Thodoris Greasidis
+      nested: []
+  version: 0.178.2
+  date: 2021-12-08T18:32:41.956Z
+- commits:
     - subject: 'state-patch: Fix image update throttling key'
       hash: f8032c884e94017cb58ad8a69111d9cc8f6a2420
       body: ''
