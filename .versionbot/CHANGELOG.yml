@@ -1,4 +1,27 @@
 - commits:
+    - subject: Combine the "device operated by release" rules
+      hash: 4f5826720cc97eb75fb795493065ec12600504dc
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+        signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+      author: Thodoris Greasidis
+      nested: []
+    - subject: Optimize the "device operated by same device type hostApp" rule
+      hash: 6e815efbdc1a3c8b02b374e6fc95910dd5055cf9
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+        signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+      author: Thodoris Greasidis
+      nested: []
+  version: 0.178.2
+  date: 2021-12-08T17:48:47.594Z
+- commits:
     - subject: 'state-patch: Fix image update throttling key'
       hash: f8032c884e94017cb58ad8a69111d9cc8f6a2420
       body: ''
