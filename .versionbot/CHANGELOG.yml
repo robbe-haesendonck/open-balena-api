@@ -1,4 +1,15 @@
 - commits:
+    - subject: Add device configuration setting for terminating TLS on the device.
+      hash: 61839f846717d8e4e98d2dfa9aeb9293281d1b28
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Pranav Peshwe
+      nested: []
+  version: 0.182.0
+  date: 2021-12-30T13:57:46.523Z
+- commits:
     - subject: Add /user/v1/refresh-token GET & POST endpoints
       hash: ddb358ee2e3ee25cb80bb80559f48b1eec8f2e18
       body: ''
