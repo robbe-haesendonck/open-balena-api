@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update configuration variable descriptions'
+      hash: b52b5beed4949d1de2e86e55a6855a9cbbbd4b3f
+      body: ''
+      footer:
+        Signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+      author: Vipul Gupta (@vipulgupta2048)
+      nested: []
+  version: 0.181.3
+  date: 2022-01-03T18:07:53.049Z
+- commits:
     - subject: Convert a missed Bluebird.delay
       hash: d11734f432f847d6217f9d4e42dc84dc4a5a1967
       body: ''
