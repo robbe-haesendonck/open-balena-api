@@ -1,4 +1,17 @@
 - commits:
+    - subject: Use a hash tag for redis logs keys
+      hash: 34330b362e81e449f6d9a231d62d477e2b5fd4cb
+      body: |
+        This allows specifying the part of the key to use for redis hashing to
+        ensure that related logs keys are grouped together
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Pagan Gazzard
+      nested: []
+  version: 0.188.0
+  date: 2022-01-17T18:16:56.528Z
+- commits:
     - subject: Update open-balena-base to 13.0.4
       hash: ceed88e83684a0eac9df600033167c6818425028
       body: |
