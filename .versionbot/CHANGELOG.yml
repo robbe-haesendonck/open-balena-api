@@ -1,4 +1,15 @@
 - commits:
+    - subject: Add v3 state-get endpoint
+      hash: 99754fd115e02b481aa5564154c8545fec34bdd8
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+      nested: []
+  version: 0.189.3
+  date: 2022-02-04T19:15:23.249Z
+- commits:
     - subject: Remove unnecessary import
       hash: 62ccfa0cf4a906d844fc0b88f968db9552cae422
       body: ""
