@@ -1,4 +1,29 @@
 - commits:
+    - subject: Stop accepting the application&device device_type POST parameter
+      hash: 7076fb7fedca8766e1725b5ff532d2f5714105f1
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        See: https://jel.ly.fish/55d814fc-d378-44ef-b9d9-17b42b81138f
+        see: https://jel.ly.fish/55d814fc-d378-44ef-b9d9-17b42b81138f
+        Signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+        signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+      author: Thodoris Greasidis
+      nested: []
+    - subject: Stop using the v5 app's & device's device_type property internally
+      hash: 22032b557cb655c32df23152e4de483c643bd878
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+        signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+      author: Thodoris Greasidis
+      nested: []
+  version: 0.190.0
+  date: 2022-02-05T00:45:31.776Z
+- commits:
     - subject: Remove unnecessary import
       hash: 62ccfa0cf4a906d844fc0b88f968db9552cae422
       body: ""
