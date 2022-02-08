@@ -16,7 +16,7 @@ export let server: Server;
 export let version: string;
 export let pineTest: PineTest;
 
-export const initSupertest = async function () {
+export const initSupertest = async function (initConfig?: any) {
 	await deInitSupertest();
 	// delete require.cache[require.resolve('./../../init')];
 	const init = require('./../../init');
@@ -26,7 +26,7 @@ export const initSupertest = async function () {
 	app = init.app;
 	pineTest = new PineTest({ apiPrefix: `${version}/` }, { app });
 	await preInit();
-	server = await init.init(defaultConfig);
+	server = await init.init(initConfig || defaultConfig);
 	await postInit();
 	return server;
 };
