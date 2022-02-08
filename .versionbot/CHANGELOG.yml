@@ -1,4 +1,17 @@
 - commits:
+    - subject: Seperate test init and execution from runtime init
+      hash: 7b19499c741c7516dd71532851be9e6de46c209c
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Harald Fischer <harald@balena.io>
+        signed-off-by: Harald Fischer <harald@balena.io>
+      author: Harald Fischer
+      nested: []
+  version: 0.189.4
+  date: 2022-02-08T20:46:03.405Z
+- commits:
     - subject: Return the ratelimiting key used from the ratelimit middleware
       hash: 61d4cd6250df0f4045ca49d5f862708863aa204a
       body: |
