@@ -111,4 +111,6 @@ else
 	echo "Running tests:$test_files"
 fi
 
+docker exec -it $api_id pwd
+docker exec -it $api_id ls test/fixtures/19-async-migrator/01-migrations/
 docker exec ${extra_env} -it $api_id ./node_modules/.bin/mocha $test_files --bail ${extra_args}

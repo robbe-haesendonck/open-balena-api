@@ -228,6 +228,13 @@ export const init = async (configParamter?: any) => {
 			process.exit();
 		}
 
+		console.log(
+			`configParamter: ${JSON.stringify(
+				configParamter.models[0].migrationsPath,
+				null,
+				2,
+			)}`,
+		);
 		const { setup } = await import('./src');
 		const { startServer } = await setup(app, {
 			config: configParamter ?? config,
