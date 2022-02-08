@@ -1,6 +1,9 @@
 import { expect } from 'chai';
+import { initSupertest, supertest } from './test-lib/supertest';
 
-import { supertest } from './test-lib/supertest';
+before(async function () {
+	await initSupertest();
+});
 
 const checkBaseVarsResult = (
 	vars: AnyObject,

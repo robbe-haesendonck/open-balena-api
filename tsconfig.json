@@ -7,6 +7,6 @@
 		"src/**/*.ts",
 		"typings/**/*.d.ts",
 		"*.ts",
-		"test/**/*.ts"
+		"test/**/*.spec.ts"
 	]
 }

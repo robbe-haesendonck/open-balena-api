@@ -12,7 +12,6 @@ api_id=$(sed -n "4{p;q;}" "$CONFIG_FILE" 2>/dev/null) || true
 
 
 external=''
-test_versions=''
 test_files=''
 teardown=0
 stop=0
@@ -45,7 +44,7 @@ while [[ $# -gt 0 ]]; do
 			shift
 		;;
 		*)
-			test_files="$test_files $key"
+			test_files="$test_files --spec ./test/*$key*"
 		;;
 	esac
 done
@@ -100,10 +99,10 @@ echo "Redis: $redis_id"
 echo " Loki: $loki_id"
 echo '-----------------------------------------------------------------------'
 
-echo 'Clearing database'
+# echo 'Clearing database'
 docker exec $db_id /bin/sh -c "psql --username=docker --dbname=postgres --command='DROP SCHEMA \"public\" CASCADE; CREATE SCHEMA \"public\";'"
 
-echo 'Clearing Redis'
+# echo 'Clearing Redis'
 docker exec $redis_id /bin/sh -c "redis-cli flushall"
 
 if [[ -z "$test_files" ]]; then
@@ -111,10 +110,5 @@ if [[ -z "$test_files" ]]; then
 else
 	echo "Running tests:$test_files"
 fi
-if [[ -z "$test_versions" ]]; then
-	echo "Running all versions"
-else
-	echo "Running versions:$test_versions"
-fi
 
-docker exec ${extra_env} --env TEST_VERSIONS="$test_versions" --env TEST_FILES="$test_files" -it $api_id ./node_modules/.bin/mocha --bail ${extra_args}
+docker exec ${extra_env} -it $api_id ./node_modules/.bin/mocha $test_files --bail ${extra_args}

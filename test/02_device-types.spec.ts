@@ -2,8 +2,8 @@ import { sbvrUtils, permissions } from '@balena/pinejs';
 import * as _ from 'lodash';
 import { expect } from './test-lib/chai';
 import { version } from './test-lib/versions';
+import { initSupertest, supertest } from './test-lib/supertest';
 
-import { supertest } from './test-lib/supertest';
 // All of these test device types are not part of the contracts, so we have to include them manually until we stop syncing with S3.
 const addFakeDeviceTypes = () => {
 	let fakeDeviceTypeIds: number[];
@@ -81,6 +81,10 @@ const addFakeDeviceTypes = () => {
 };
 
 describe('device type resource', () => {
+	before(async function () {
+		await initSupertest();
+	});
+
 	it('should succeed to return a result', async () => {
 		const res = await supertest().get(`/${version}/device_type`).expect(200);
 		expect(res.body.d).to.be.an('array');
@@ -95,6 +99,10 @@ describe('device type resource', () => {
 });
 
 describe('device type endpoints', () => {
+	before(async function () {
+		await initSupertest();
+	});
+
 	addFakeDeviceTypes();
 
 	describe('/device-types/v1', () => {

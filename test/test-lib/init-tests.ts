@@ -57,13 +57,13 @@ const loadAdminUserAndOrganization = async () => {
 
 	return { user, org };
 };
-
+let balenaOsFx: fixtures.Fixtures;
 export const postInit = async () => {
 	await synchronizeContracts(getContractRepos());
 	await import('./device-type');
 
 	const { user, org } = await loadAdminUserAndOrganization();
-	const balenaOsFx = await fixtures.load('00-balena_os');
+	balenaOsFx = await fixtures.load('00-balena_os');
 	fixtures.setDefaultFixtures('users', { admin: Promise.resolve(user) });
 	fixtures.setDefaultFixtures('organizations', {
 		admin: Promise.resolve(org),
@@ -74,5 +74,4 @@ export const postInit = async () => {
 			]),
 		),
 	});
-	await import('../00_init');
 };
