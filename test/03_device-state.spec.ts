@@ -2,11 +2,7 @@ import * as mockery from 'mockery';
 import * as sinon from 'sinon';
 import { expect } from './test-lib/chai';
 import * as fakeDevice from './test-lib/fake-device';
-import {
-	initSupertest,
-	supertest,
-	UserObjectParam,
-} from './test-lib/supertest';
+import { supertest, UserObjectParam } from './test-lib/supertest';
 import { version } from './test-lib/versions';
 import { pineTest } from './test-lib/pinetest';
 import * as configMock from '../src/lib/config';
@@ -61,8 +57,6 @@ describe('Device State v2', () => {
 	let device: fakeDevice.Device;
 
 	before(async () => {
-		await initSupertest();
-
 		fx = await fixtures.load('03-device-state');
 
 		admin = fx.users.admin;
@@ -342,7 +336,6 @@ describe('Device State v2 patch', function () {
 		`cache$$lastMetricsReportTime$${uuid}`;
 
 	before(async () => {
-		await initSupertest();
 		fx = await fixtures.load('03-device-state');
 
 		admin = fx.users.admin;

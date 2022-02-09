@@ -1,5 +1,5 @@
 export = {
-	fn: async (tx) => {
+	fn: async (tx: any) => {
 		const staticSql = `\
 UPDATE "test3"
 SET "columnC" = "test"."columnA"

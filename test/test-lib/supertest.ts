@@ -5,7 +5,11 @@ import { User } from '../../src/infra/auth/jwt-passport';
 import { postInit, preInit } from './init-tests';
 import { PineTest } from 'pinejs-client-supertest';
 
+import { redis } from '../../src/infra/redis';
+
 import { sbvrUtils } from '@balena/pinejs';
+
+import defaultConfig = require('./../../config');
 
 export type { PineTest };
 
@@ -16,23 +20,32 @@ export let server: Server;
 export let version: string;
 export let pineTest: PineTest;
 
-export const initSupertest = async function (initConfig?: any) {
-	await deInitSupertest();
-	// delete require.cache[require.resolve('./../../init')];
+before(async function () {
+	await initSupertest();
+});
+
+export const initSupertest = async function (params?: {
+	initConfig?: any;
+	deleteDatabase?: boolean;
+	flushCache?: boolean;
+}) {
+	await deInitSupertest(params?.deleteDatabase, params?.flushCache);
+
 	const init = require('./../../init');
 	version = init.EXPOSED_API_VERSION;
-	const defaultConfig = require('./../../config');
-	// defaultConfig.models[0].migrationsPath = __dirname + '/fixtures/migrations';
 	app = init.app;
-	pineTest = new PineTest({ apiPrefix: `${version}/` }, { app });
 	await preInit();
-	server = await init.init(initConfig || defaultConfig);
+	server = await init.init(params?.initConfig || defaultConfig);
 	await postInit();
+	pineTest = new PineTest({ apiPrefix: `${version}/` }, { app });
 	return server;
 };
 
-// TODO: Why calling this in after is not cleaning up before calling next before?
-export const deInitSupertest = async function () {
+// TODO: Why calling this in mocha.after is not cleaning up before calling next before?
+export const deInitSupertest = async function (
+	deleteDatabase: boolean = true,
+	flushCache: boolean = false,
+) {
 	// TODO: flushing redis in deInitSupertest?
 	if (server) {
 		await new Promise(async (resolve) => {
@@ -41,7 +54,12 @@ export const deInitSupertest = async function () {
 				resolve(null);
 			});
 		});
-		await deleteDatabase();
+	}
+	if (deleteDatabase) {
+		await dropDatabaseSchema();
+	}
+	if (flushCache) {
+		await flushRedisCache();
 	}
 };
 
@@ -62,15 +80,28 @@ export const supertest = function (user?: string | UserObjectParam) {
 	return req as ReturnType<typeof $supertest.agent>;
 };
 
-const deleteDatabase = async (): Promise<void> => {
-	await sbvrUtils.db.transaction(async (tx) =>
-		tx.executeSql(
-			`
+const dropDatabaseSchema = async (): Promise<void> => {
+	if (sbvrUtils.db) {
+		await sbvrUtils.db.transaction(async (tx) => {
+			try {
+				await tx.executeSql(
+					`
 DROP SCHEMA \"public\" CASCADE; CREATE SCHEMA \"public\";`,
-		),
-	);
+				);
+			} catch (err) {
+				// ingore all, we don't really care
+			}
+		});
+	} else {
+		// ignore it, most likely the db instance is not yet initialized
+	}
 };
 
-before(async function () {
-	await initSupertest();
-});
+const flushRedisCache = async (): Promise<void> => {
+	try {
+		const result = await redis.flushdb('sync');
+		console.log(`flushRedisCache result: ${result}`);
+	} catch (err) {
+		console.log(`flushRedisCache err: ${err}`);
+	}
+};
