@@ -51,6 +51,8 @@ describe('Async Migrations', async function () {
 		});
 	});
 
+	// TODO Async migrator in background is not killed with initSupertest
+
 	describe('async migration skip', function () {
 		beforeEach(async function () {
 			const testConfig = require('../config');
