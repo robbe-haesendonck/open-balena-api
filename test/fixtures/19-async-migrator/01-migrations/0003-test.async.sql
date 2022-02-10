@@ -1,4 +1,4 @@
-UPDATE "test2"
+UPDATE "test"
 SET "columnC" = "test"."columnA"
 WHERE id IN (   SELECT id FROM (
                     SELECT id FROM "test"

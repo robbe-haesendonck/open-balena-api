@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { sbvrUtils, dbModule } from '@balena/pinejs';
 import { expect } from 'chai';
 import * as fs from 'fs';
+import { setTimeout as delay } from 'timers/promises';
 
 describe('Async Migrations', async function () {
 	this.timeout(60000);
@@ -17,36 +18,40 @@ describe('Async Migrations', async function () {
 			// delete cached migrations
 			testConfig.models[0].migrations = {};
 			await initSupertest({ initConfig: testConfig, deleteDatabase: true });
+
+			// manually calling the init data creation sql query as the model gets
+			// executed for the first time and sync migrations are skipped
+			const initDataSql = await fs.promises.readFile(
+				__dirname +
+					'/fixtures/19-async-migrator/01-migrations/0001-init-data.sync.sql',
+				'utf8',
+			);
+
+			await sbvrUtils.db.transaction(async (tx) => {
+				await tx.executeSql(initDataSql);
+			});
 		});
 
-		it('wait for first catch up', function (done) {
-			const test = setInterval(async () => {
-				let result;
-				await sbvrUtils.db.transaction(async (tx) => {
-					try {
-						result = await tx.executeSql(
-							`
-						SELECT * FROM test;`,
-						);
-					} catch (err) {
-						// just ignore it - case will fail after timeout
-					}
-				});
-				const unequalRows = (result as unknown as dbModule.Result).rows.filter(
-					(row) => {
-						return row.columnA !== row.columnC;
-					},
-				);
+		it('wait for migrators run', async function () {
+			await delay(3000); // wait for some migrations to have happened
+			let result: dbModule.Result = {} as dbModule.Result;
 
-				if (unequalRows.length === 0) {
-					clearInterval(test);
-					done();
-				}
-			}, 1000);
+			await sbvrUtils.db.transaction(async (tx) => {
+				result = await tx.executeSql(
+					`	SELECT * FROM test
+						WHERE  "columnA" = "columnC";`,
+				);
+			});
+			expect(result?.rows).to.be.not.empty;
+
+			await sbvrUtils.db.transaction(async (tx) => {
+				result = await tx.executeSql(`SELECT * FROM "migration status";`);
+			});
+			expect(result?.rows).to.be.not.empty;
 		});
 	});
 
-	describe.only('async migration skip', function () {
+	describe('async migration skip', function () {
 		beforeEach(async function () {
 			const testConfig = require('../config');
 
@@ -66,36 +71,32 @@ describe('Async Migrations', async function () {
 			);
 
 			await sbvrUtils.db.transaction(async (tx) => {
-				try {
-					await tx.executeSql(initDataSql);
-				} catch (err) {
-					// just ignore it - case will fail after timeout
-				}
+				await tx.executeSql(initDataSql);
 			});
 		});
 
-		it.only('no async row migration should take place', function (done) {
-			setTimeout(async () => {
-				let result: dbModule.Result = {} as dbModule.Result;
+		it('no async row migration should take place', async function () {
+			await delay(2000); // wait for some migrations to have happened
+			let result: dbModule.Result = {} as dbModule.Result;
 
-				await sbvrUtils.db.transaction(async (tx) => {
-					try {
-						result = await tx.executeSql(
-							`
-						SELECT * FROM test
+			await sbvrUtils.db.transaction(async (tx) => {
+				result = await tx.executeSql(
+					`	SELECT * FROM test
 						WHERE  "columnA" = "columnC";`,
-						);
-					} catch (err) {
-						// just ignore it - case will fail after timeout
-					}
-				});
-				try {
-					expect(result?.rows).to.be.empty;
-					done();
-				} catch (err) {
-					done(err);
-				}
-			}, 2000);
+				);
+			});
+			expect(result?.rows).to.be.empty;
+
+			await sbvrUtils.db.transaction(async (tx) => {
+				result = await tx.executeSql(`SELECT * FROM "migration status";`);
+			});
+			expect(result?.rows).to.be.empty;
 		});
 	});
 });
+
+// TODO: Testcase parallel migration
+// TODO: Testcase forever migration (multiple catch ups)
+// TODO: Parallel Error / Success migration
+
+// TODO: TableLock test?
