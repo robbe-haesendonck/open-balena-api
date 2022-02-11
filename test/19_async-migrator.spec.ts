@@ -8,8 +8,8 @@ import { setTimeout as delay } from 'timers/promises';
 describe('Async Migrations', async function () {
 	this.timeout(60000);
 
-	describe('data catch up', function () {
-		beforeEach(async function () {
+	describe('standard async migrations', function () {
+		before(async function () {
 			const testConfig = require('../config');
 
 			testConfig.models[0].migrationsPath =
@@ -22,18 +22,21 @@ describe('Async Migrations', async function () {
 			// manually calling the init data creation sql query as the model gets
 			// executed for the first time and sync migrations are skipped
 			const initDataSql = await fs.promises.readFile(
-				__dirname +
-					'/fixtures/19-async-migrator/01-migrations/0001-init-data.sync.sql',
+				testConfig.models[0].migrationsPath + '0001-init-data.sync.sql',
 				'utf8',
 			);
 
 			await sbvrUtils.db.transaction(async (tx) => {
-				await tx.executeSql(initDataSql);
+				try {
+					await tx.executeSql(initDataSql);
+				} catch (err) {
+					console.log(`err: ${err}`);
+				}
 			});
 		});
 
 		it('wait for migrators run', async function () {
-			await delay(3000); // wait for some migrations to have happened
+			await delay(5000); // wait for some migrations to have happened
 			let result: dbModule.Result = {} as dbModule.Result;
 
 			await sbvrUtils.db.transaction(async (tx) => {
@@ -49,12 +52,47 @@ describe('Async Migrations', async function () {
 			});
 			expect(result?.rows).to.be.not.empty;
 		});
+
+		it('wait for migrators catched up ', async function () {
+			await delay(2000); // wait for some migrations to have happened
+			let result: dbModule.Result = {} as dbModule.Result;
+			let allResults: dbModule.Result = {} as dbModule.Result;
+
+			do {
+				await sbvrUtils.db.transaction(async (tx) => {
+					allResults = await tx.executeSql(
+						`	SELECT * FROM test
+							ORDER BY id;`,
+					);
+				});
+
+				await sbvrUtils.db.transaction(async (tx) => {
+					result = await tx.executeSql(
+						`	SELECT * FROM test
+							WHERE  "columnA" = "columnC"
+							ORDER BY id;`,
+					);
+				});
+			} while (result?.rows?.length !== allResults?.rows?.length);
+
+			expect(result?.rows).to.eql(allResults?.rows);
+
+			await sbvrUtils.db.transaction(async (tx) => {
+				result = await tx.executeSql(`SELECT * FROM "migration status";`);
+			});
+			expect(result?.rows).to.be.not.empty;
+			// expect(result?.rows[])
+		});
+
+		// TODO: Testcase forever migration (multiple catch ups)
+
+		// it('should catch up future data changes', async function () {});
 	});
 
 	// TODO Async migrator in background is not killed with initSupertest
 
 	describe('async migration skip', function () {
-		beforeEach(async function () {
+		before(async function () {
 			const testConfig = require('../config');
 
 			testConfig.models[0].migrationsPath =
@@ -67,8 +105,7 @@ describe('Async Migrations', async function () {
 			// manually calling the init data creation sql query as the model gets
 			// executed for the first time and sync migrations are skipped
 			const initDataSql = await fs.promises.readFile(
-				__dirname +
-					'/fixtures/19-async-migrator/02-skip-async/0001-init-data.sync.sql',
+				testConfig.models[0].migrationsPath + '0001-init-data.sync.sql',
 				'utf8',
 			);
 
@@ -98,7 +135,9 @@ describe('Async Migrations', async function () {
 });
 
 // TODO: Testcase parallel migration
-// TODO: Testcase forever migration (multiple catch ups)
+
 // TODO: Parallel Error / Success migration
 
 // TODO: TableLock test?
+
+// TODO: massive data test?
